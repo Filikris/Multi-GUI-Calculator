@@ -1,7 +1,11 @@
 package multiguicalculator;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -20,30 +24,44 @@ public class Main {
 		Display display = new Display();
 		Shell shell = new Shell(display);
 		shell.setText("SWT Calculator");
-		TabFolder panels = new TabFolder(shell, SWT.NONE);
-		TabItem panelCalculator = new TabItem(panels, SWT.NONE);
+		shell.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.VERTICAL)); 
+		
+		TabFolder panels = new TabFolder(shell, SWT.BORDER);
+		TabItem panelCalculator = new TabItem(panels, SWT.BORDER);
 		panelCalculator.setText("Calculator");
-		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 3; 
-		Text num1Field = new Text(panels, SWT.BORDER);
-		Combo operationWithNums = new Combo(panels, SWT.READ_ONLY);
+		
+		FillLayout fillLayout= new FillLayout(SWT.VERTICAL);
+        fillLayout.marginHeight= 40;
+        fillLayout.marginWidth= 40;
+        fillLayout.spacing=20;
+		
+		Composite compositePanelCalculator = new Composite(panels, SWT.BORDER);
+        compositePanelCalculator.setLayout(fillLayout);
+		
+		Composite compositeLineWithNums = new Composite(compositePanelCalculator, SWT.NONE); 
+        compositeLineWithNums.setLayout(new FillLayout());
+		Text num1Field = new Text(compositeLineWithNums, SWT.BORDER);
+		Combo operationWithNums = new Combo(compositeLineWithNums, SWT.READ_ONLY);
 		operationWithNums.setItems(actions);
-		Text num2Field = new Text(panels, SWT.BORDER);
-		Button flyCalculator = new Button(panels,SWT.CHECK);
+		Text num2Field = new Text(compositeLineWithNums, SWT.BORDER);
+		
+		Composite compositeOptionsCalculate = new Composite(compositePanelCalculator, SWT.NONE);
+        compositeOptionsCalculate.setLayout(new FillLayout());
+		Button flyCalculator = new Button(compositeOptionsCalculate,SWT.CHECK);
 		flyCalculator.setText("Calculate on the fly");
-		Button calculate = new Button(panels, SWT.NONE);
+		Button calculate = new Button(compositeOptionsCalculate, SWT.NONE);
 		calculate.setText("Calculate");
-		Label textResult = new Label(panels, SWT.NONE);
+		
+		Composite compositeResult = new Composite(compositePanelCalculator, SWT.NONE);
+        compositeResult.setLayout(new FillLayout());
+		Label textResult = new Label(compositeResult, SWT.NONE);
 		textResult.setText("Result: ");
-		Text resultField = new Text(panels, SWT.BORDER);
-		panels.setLayout(gridLayout);
+		Text resultField = new Text(compositeResult, SWT.BORDER);
 		
+		panelCalculator.setControl(compositePanelCalculator);
+			
 		TabItem panelHistory = new TabItem(panels, SWT.NONE);
-		panelHistory.setText("History");
-		
-		
-		shell.setLayout(gridLayout);        
-		shell.pack();
+		panelHistory.setText("History");       
 
 		shell.open();
 		while (!shell.isDisposed()) {
