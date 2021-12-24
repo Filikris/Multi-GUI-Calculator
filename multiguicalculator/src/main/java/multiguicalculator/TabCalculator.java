@@ -24,6 +24,12 @@ public class TabCalculator {
 	private Label textResult;
 	private Text resultField;
 	private TabItem tabCalculator;
+	private SelectionListener selectionListener = new SelectionAdapter() {
+        @Override
+        public void widgetSelected(SelectionEvent e) {
+        	calculate();
+        }
+    };
 
 	
 	public TabCalculator (final TabFolder folder) {
@@ -60,12 +66,21 @@ public class TabCalculator {
 		
 		tabCalculator.setControl(compositePanelCalculator);
 		
-		calculate.addSelectionListener(new SelectionAdapter() {
+		calculate.addSelectionListener(selectionListener);
+		
+		flyCalculator.addSelectionListener(new SelectionAdapter() {
 	        @Override
 	        public void widgetSelected(SelectionEvent e) {
-	        	calculate();
+	        	if(flyCalculator.getSelection()) {
+	                calculate.setEnabled(false);
+	                operationWithNums.addSelectionListener(selectionListener);
+	                calculate();
+	            } else {
+	                calculate.setEnabled(true);
+	                operationWithNums.removeSelectionListener(selectionListener);
+	            }
 	        }
-	        });
+        });
 	}
 	
     private void calculate(){
