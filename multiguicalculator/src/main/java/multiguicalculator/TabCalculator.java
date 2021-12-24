@@ -4,10 +4,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -30,6 +33,30 @@ public class TabCalculator {
         	calculate();
         }
     };
+    private VerifyListener verifyListener = new VerifyListener() {
+		public void verifyText(VerifyEvent e) {
+
+			  boolean doit = true;
+
+			  if (!(Character.isDigit(e.character) || e.character == SWT.DEL || e.character == SWT.BS)) {
+			    doit = false;
+			  	}
+
+			  if (!doit) {
+			    try {
+			    	Integer.parseInt(e.text);
+			    	doit = true;
+			    	} catch (NumberFormatException ex) {
+			    	doit = false;
+			    	}
+			  	}
+
+			  e.doit = doit;
+			  if (!e.doit) {
+			    Display.getCurrent().beep();
+			  }
+			}
+    	};
 
 	
 	public TabCalculator (final TabFolder folder) {
@@ -81,6 +108,9 @@ public class TabCalculator {
 	            }
 	        }
         });
+		
+		num1Field.addVerifyListener(verifyListener);
+		num2Field.addVerifyListener(verifyListener);
 	}
 	
     private void calculate(){
@@ -88,5 +118,7 @@ public class TabCalculator {
                 actions[operationWithNums.getSelectionIndex()], Double.parseDouble(num2Field.getText()));
         resultField.setText("" + result);
     }
+    
+    
 
 }
