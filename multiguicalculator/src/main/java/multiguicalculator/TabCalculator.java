@@ -1,6 +1,9 @@
 package multiguicalculator;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -21,8 +24,9 @@ public class TabCalculator {
 	private Label textResult;
 	private Text resultField;
 	private TabItem tabCalculator;
+
 	
-	public TabCalculator (TabFolder folder) {
+	public TabCalculator (final TabFolder folder) {
 		tabCalculator = new TabItem(folder, SWT.BORDER);
 		tabCalculator.setText("Calculator");
 		FillLayout fillLayout= new FillLayout(SWT.VERTICAL);
@@ -35,25 +39,39 @@ public class TabCalculator {
 	
 		Composite compositeLineWithNums = new Composite(compositePanelCalculator, SWT.NONE); 
         compositeLineWithNums.setLayout(new FillLayout());
-		Text num1Field = new Text(compositeLineWithNums, SWT.BORDER);
-		Combo operationWithNums = new Combo(compositeLineWithNums, SWT.READ_ONLY);
+		num1Field = new Text(compositeLineWithNums, SWT.BORDER);
+		operationWithNums = new Combo(compositeLineWithNums, SWT.READ_ONLY);
 		operationWithNums.setItems(actions);
-		Text num2Field = new Text(compositeLineWithNums, SWT.BORDER);
+		operationWithNums.select(0);
+		num2Field = new Text(compositeLineWithNums, SWT.BORDER);
 		
 		Composite compositeOptionsCalculate = new Composite(compositePanelCalculator, SWT.NONE);
         compositeOptionsCalculate.setLayout(new FillLayout());
-		Button flyCalculator = new Button(compositeOptionsCalculate,SWT.CHECK);
+		flyCalculator = new Button(compositeOptionsCalculate,SWT.CHECK);
 		flyCalculator.setText("Calculate on the fly");
-		Button calculate = new Button(compositeOptionsCalculate, SWT.NONE);
+		calculate = new Button(compositeOptionsCalculate, SWT.NONE);
 		calculate.setText("Calculate");
 		
 		Composite compositeResult = new Composite(compositePanelCalculator, SWT.NONE);
         compositeResult.setLayout(new FillLayout());
-		Label textResult = new Label(compositeResult, SWT.NONE);
+		textResult = new Label(compositeResult, SWT.NONE);
 		textResult.setText("Result: ");
-		Text resultField = new Text(compositeResult, SWT.BORDER);
+		resultField = new Text(compositeResult, SWT.BORDER);
 		
 		tabCalculator.setControl(compositePanelCalculator);
+		
+		calculate.addSelectionListener(new SelectionAdapter() {
+	        @Override
+	        public void widgetSelected(SelectionEvent e) {
+	        	calculate();
+	        }
+	        });
 	}
+	
+    private void calculate(){
+        double result = calculator.operation(Double.parseDouble(num1Field.getText()),
+                actions[operationWithNums.getSelectionIndex()], Double.parseDouble(num2Field.getText()));
+        resultField.setText("" + result);
+    }
 
 }
