@@ -23,7 +23,7 @@ public class Main {
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.VERTICAL)); 
 		
 		TabFolder panels = new TabFolder(shell, SWT.BORDER);
-		TabCalculator tabCalculator = new TabCalculator(panels);
+		CalculatorPanel tabCalculator = new CalculatorPanel(panels);
 		
 		
 		TabItem panelHistory = new TabItem(panels, SWT.NONE);

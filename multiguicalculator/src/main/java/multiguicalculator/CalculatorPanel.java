@@ -1,6 +1,8 @@
 package multiguicalculator;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -16,7 +18,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
-public class TabCalculator {
+public class CalculatorPanel {
 	private static final String[] actions = new String[]{"+", "-", "/", "*"};
 	private Calculator calculator = new Calculator();
 	private Text num1Field;
@@ -57,9 +59,28 @@ public class TabCalculator {
 			  }
 			}
     	};
+    	
+    private ModifyListener modifyListener = new ModifyListener() {
+		public void modifyText(ModifyEvent e) {
+			boolean num1Valid = isValid(num1Field);
+	    	boolean num2Valid = isValid(num2Field);
+	    	
+	    	  if (!num1Valid || !num2Valid) {
+	              calculate.setEnabled(false);
+	          }
+	          else {
+	              if(flyCalculator.getSelection()) {
+	                  calculate();
+	                  calculate.setEnabled(false);
+	              } else {
+	                  calculate.setEnabled(true);
+	              }
+	          }
+		}
+	};
 
 	
-	public TabCalculator (final TabFolder folder) {
+	public CalculatorPanel (final TabFolder folder) {
 		tabCalculator = new TabItem(folder, SWT.BORDER);
 		tabCalculator.setText("Calculator");
 		FillLayout fillLayout= new FillLayout(SWT.VERTICAL);
@@ -84,6 +105,7 @@ public class TabCalculator {
 		flyCalculator.setText("Calculate on the fly");
 		calculate = new Button(compositeOptionsCalculate, SWT.NONE);
 		calculate.setText("Calculate");
+		calculate.setEnabled(false);
 		
 		Composite compositeResult = new Composite(compositePanelCalculator, SWT.NONE);
         compositeResult.setLayout(new FillLayout());
@@ -109,8 +131,12 @@ public class TabCalculator {
 	        }
         });
 		
+		num1Field.addModifyListener(modifyListener);
+		num2Field.addModifyListener(modifyListener);
+				
 		num1Field.addVerifyListener(verifyListener);
 		num2Field.addVerifyListener(verifyListener);
+		
 	}
 	
     private void calculate(){
@@ -119,6 +145,8 @@ public class TabCalculator {
         resultField.setText("" + result);
     }
     
-    
-
+    public boolean isValid(Text text) {    	
+    	return !(text.getText().trim().isEmpty());
+    }
+    	 
 }
