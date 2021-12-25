@@ -1,4 +1,4 @@
-package com.task.calculator.swt;
+package lux.task.calculator.swt;
 
 public class Calculator {
 	public double operation(double num1, String operation, double num2) {

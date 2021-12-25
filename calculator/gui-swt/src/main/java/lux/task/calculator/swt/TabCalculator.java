@@ -1,4 +1,4 @@
-package com.task.calculator.swt;
+package lux.task.calculator.swt;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
