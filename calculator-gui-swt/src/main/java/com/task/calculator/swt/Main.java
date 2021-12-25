@@ -1,4 +1,4 @@
-package multiguicalculator;
+package com.task.calculator.swt;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
