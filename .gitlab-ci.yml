@@ -58,8 +58,11 @@ deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - echo "Deploying application..."
+    - ls -all
     - cd calculator
+    - ls -all
     - mvn $MAVEN_CLI_OPTS deploy -s ../ci_settings.xml
+    - ls -all
     - cd ..
     - echo "Application successfully deployed."
   only:
