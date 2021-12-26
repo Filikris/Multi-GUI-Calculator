@@ -34,7 +34,7 @@ build-job:       # This job runs in the build stage, which runs first.
   script:
     - echo "Compiling the code..."
     - cd calculator
-    - 'mvn $MAVEN_CLI_OPTS compile'
+    - mvn $MAVEN_CLI_OPTS compile
     - cd ..
     - echo "Compile complete."
 
@@ -55,7 +55,7 @@ deploy-job:      # This job runs in the deploy stage.
   script:
     - echo "Deploying application..."
     - cd calculator
-    - 'mvn $MAVEN_CLI_OPTS deploy -s ../ci_settings.xml'
+    - mvn $MAVEN_CLI_OPTS deploy -s ../ci_settings.xml
     - cd ..
     - echo "Application successfully deployed."
   only:
