@@ -20,6 +20,9 @@ stages:          # List of stages for jobs, and their order of execution
   - test
   - deploy
 
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
 cache:
   paths:
     - .m2/repository/
