@@ -59,21 +59,12 @@ public class CalculatorPanel extends Composite {
     	
     private ModifyListener modifyListener = new ModifyListener() {
 		public void modifyText(ModifyEvent e) {
-			boolean num1Valid = isValid(num1Field);
-	    	boolean num2Valid = isValid(num2Field);
-	    	
-	    	  if (!num1Valid || !num2Valid) {
-	              calculate.setEnabled(false);
-	          }
-	          else {
-	              if(flyCalculator.getSelection()) {
-	                  calculate();
-	                  calculate.setEnabled(false);
-	              } else {
-	                  calculate.setEnabled(true);
-	              }
-	          }
-		}
+			if(flyCalculator.getSelection()) {
+                calculate();
+			} else {
+	        calculate.setEnabled(isValid(num1Field) && isValid(num2Field));
+			}
+	    }
 	};
 	
 	public CalculatorPanel (Composite parent, int style) {
@@ -118,7 +109,7 @@ public class CalculatorPanel extends Composite {
 	                operationWithNums.addSelectionListener(selectionListener);
 	                calculate();
 	            } else {
-	                calculate.setEnabled(true);
+	            	calculate.setEnabled(isValid(num1Field) && isValid(num2Field));
 	                operationWithNums.removeSelectionListener(selectionListener);
 	            }
 	        }
@@ -133,9 +124,13 @@ public class CalculatorPanel extends Composite {
 	}
 	
     private void calculate(){
-        double result = calculator.operation(Double.parseDouble(num1Field.getText()),
+    	try {
+    		double result = calculator.operation(Double.parseDouble(num1Field.getText()),
                 actions[operationWithNums.getSelectionIndex()], Double.parseDouble(num2Field.getText()));
-        resultField.setText("" + result);
+    		resultField.setText("" + result);
+    	} catch (NumberFormatException e) {
+    		resultField.setText("Invalid input");
+    	}
     }
     
     public boolean isValid(Text text) {    	
