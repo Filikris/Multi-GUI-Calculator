@@ -21,7 +21,7 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 variables:
-  MAVEN_OPTS: "-Dmaven.repo.local=~/.m2/repository"
+  MAVEN_OPTS: "-Dmaven.repo.local=../.m2/repository"
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
 
 cache:
