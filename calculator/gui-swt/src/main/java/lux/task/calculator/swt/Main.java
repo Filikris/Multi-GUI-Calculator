@@ -1,7 +1,11 @@
-package multiguicalculator;
+package lux.task.calculator.swt;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -19,10 +23,7 @@ public class Main {
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.VERTICAL)); 
 		
 		TabFolder panels = new TabFolder(shell, SWT.BORDER);
-		
-		TabItem tabCalculator = new TabItem(panels, SWT.BORDER);
-		tabCalculator.setText("Calculator");
-		tabCalculator.setControl(new CalculatorPanel(panels, SWT.BORDER));
+		TabCalculator tabCalculator = new TabCalculator(panels);
 		
 		
 		TabItem panelHistory = new TabItem(panels, SWT.NONE);
