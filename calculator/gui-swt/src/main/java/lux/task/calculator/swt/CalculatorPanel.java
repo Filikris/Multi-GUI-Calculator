@@ -26,6 +26,7 @@ public class CalculatorPanel extends Composite {
 	private Button calculate;
 	private Label textResult;
 	private Text resultField;
+	private HistoryPanel historyPanel;
 	private SelectionListener selectionListener = new SelectionAdapter() {
         @Override
         public void widgetSelected(SelectionEvent e) {
@@ -67,8 +68,9 @@ public class CalculatorPanel extends Composite {
 	    }
 	};
 	
-	public CalculatorPanel (Composite parent, int style) {
+	public CalculatorPanel (Composite parent, int style, HistoryPanel historyPanel) {
 		super(parent, style);
+		this.historyPanel = historyPanel;
 		
 		FillLayout fillLayout= new FillLayout(SWT.VERTICAL);
         fillLayout.marginHeight= 40;
@@ -128,6 +130,10 @@ public class CalculatorPanel extends Composite {
     		double result = calculator.operation(Double.parseDouble(num1Field.getText()),
                 actions[operationWithNums.getSelectionIndex()], Double.parseDouble(num2Field.getText()));
     		resultField.setText("" + result);
+    		
+    		historyPanel.addItem(num1Field.getText(), operationWithNums.getText(),
+    				num2Field.getText(), resultField.getText());
+    		
     	} catch (NumberFormatException e) {
     		resultField.setText("Invalid input");
     	}

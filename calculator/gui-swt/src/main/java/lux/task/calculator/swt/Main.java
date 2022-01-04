@@ -16,6 +16,8 @@ public class Main {
 	
 	
 	public static void main (String[] args){
+		
+		HistoryPanel historyPanel;
 			
 		Display display = new Display();
 		Shell shell = new Shell(display);
@@ -23,13 +25,15 @@ public class Main {
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.VERTICAL)); 
 		
 		TabFolder panels = new TabFolder(shell, SWT.BORDER);
-		TabItem tabCalculator = new TabItem(panels, SWT.NONE);
+		
+		historyPanel = new HistoryPanel(panels,SWT.NONE);
+		TabItem tabCalculator = new TabItem(panels, SWT.NONE);	
 		tabCalculator.setText("Calculator");
-		tabCalculator.setControl(new CalculatorPanel(panels, SWT.NONE));
+		tabCalculator.setControl(new CalculatorPanel(panels, SWT.NONE, historyPanel));
 		
-		
-		TabItem panelHistory = new TabItem(panels, SWT.NONE);
-		panelHistory.setText("History");       
+		TabItem tabHistory = new TabItem(panels, SWT.NONE);
+		tabHistory.setText("History");   
+		tabHistory.setControl(historyPanel);
 
 		shell.open();
 		while (!shell.isDisposed()) {
