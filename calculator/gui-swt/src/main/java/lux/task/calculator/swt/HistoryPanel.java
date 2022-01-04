@@ -1,5 +1,10 @@
 package lux.task.calculator.swt;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -9,21 +14,30 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class HistoryPanel extends Composite{
 	private Button save;
-	private Button clean;
+	private Button clear;
 	private Table table;
-	private SelectionListener selectionListener = new SelectionAdapter() {
+	private String[] titles = {"First number", "Type of operation", "Second number", "Result"};
+	private SelectionListener clearListener = new SelectionAdapter() {
         @Override
         public void widgetSelected(SelectionEvent e) {
-        	table.removeAll();;
+        	table.removeAll();
         }
     };
-	
+    private SelectionListener saveListener = new SelectionAdapter() {
+        @Override
+        public void widgetSelected(SelectionEvent e) {
+        	buttonSavePress();
+        }
+    };
+    
 	public HistoryPanel (Composite parent, int style) {
 		super (parent, style);
 		
@@ -42,7 +56,7 @@ public class HistoryPanel extends Composite{
     	GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
     	data.heightHint = 200;
     	table.setLayoutData(data);
-    	String[] titles = {"First number", "Type of operation", "Second number", "Result"};
+
     	for (String title : titles) {
     		TableColumn column = new TableColumn (table, SWT.NONE);
     		column.setText (title);
@@ -53,10 +67,11 @@ public class HistoryPanel extends Composite{
         compositeButtons.setLayout(new FillLayout());
         save = new Button(compositeButtons, SWT.NONE);
         save.setText("Save");
-        clean = new Button(compositeButtons, SWT.NONE);
-        clean.setText("Clean");
+        clear = new Button(compositeButtons, SWT.NONE);
+        clear.setText("Clear");
         
-        clean.addSelectionListener(selectionListener);
+        clear.addSelectionListener(clearListener);
+        save.addSelectionListener(saveListener);
 	}
 	
 	public void addItem(String firstNum, String operation, String secondNum, String result) {
@@ -65,6 +80,45 @@ public class HistoryPanel extends Composite{
 		item.setText(1, operation);
 		item.setText(2, secondNum);
 		item.setText(3, result);
+	}
+	
+	private void buttonSavePress() {
+		FileDialog dialog = new FileDialog(this.getShell(), SWT.SAVE);		
+		dialog.setFilterNames (new String [] {"CSV Files", "All Files (*.*)"});
+		dialog.setFilterExtensions (new String [] {"*.csv", "*.*"}); 
+		String filePath = dialog.open();
+		if(filePath == null) {
+			return;
+		}
+		
+		File fileToSave = new File(filePath);
+		System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+		
+		try (FileWriter fw = new FileWriter(fileToSave);
+                BufferedWriter bw = new BufferedWriter(fw)) {
+			
+			for (String title : titles) {
+				bw.write(title);
+				bw.write("\t");
+			}
+			bw.newLine();
+		
+			for (TableItem item : table.getItems()) {
+				bw.write(item.getText(0));
+				bw.write("\t");
+				bw.write(item.getText(1));
+				bw.write("\t");
+				bw.write(item.getText(2));
+				bw.write("\t");
+				bw.write(item.getText(3));
+				bw.write("\t");
+				bw.newLine();
+			}
+		} catch (IOException ex) {
+			MessageBox msg = new MessageBox(this.getShell(),SWT.ICON_ERROR);
+			msg.setMessage("Error");
+			msg.open();
+		}
 	}
 
 }
