@@ -42,13 +42,14 @@ public class CalculatorPanel extends Composite {
 
 			  boolean doit = true;
 
-			  if (!(Character.isDigit(e.character) || e.character == SWT.DEL || e.character == SWT.BS)) {
+			  if (!(Character.isDigit(e.character) || e.character == SWT.DEL || e.character == SWT.BS 
+					  || e.character == '.')) {
 			    doit = false;
 			  	}
 
 			  if (!doit) {
 			    try {
-			    	Integer.parseInt(e.text);
+			    	Double.parseDouble(e.text);
 			    	doit = true;
 			    	} catch (NumberFormatException ex) {
 			    	doit = false;
