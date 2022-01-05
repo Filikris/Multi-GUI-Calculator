@@ -5,7 +5,11 @@ public class Main {
 	
 	public static void main (String[] args){
 		
-		new CalculatorWindowSWT();
-		
+		try {
+			CalculatorWindowSWT window = new CalculatorWindowSWT();
+			window.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

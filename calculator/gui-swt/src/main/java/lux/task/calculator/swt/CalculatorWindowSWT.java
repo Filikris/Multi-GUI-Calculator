@@ -8,13 +8,27 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
 public class CalculatorWindowSWT {
+	private Shell shell;
 	
-	public CalculatorWindowSWT() {
+	public CalculatorWindowSWT() {}
 	
-		Display display = new Display();
-		Shell shell = new Shell(display);
+	public void open() {
+		Display display = Display.getDefault();
+		shell = new Shell(display);
+		createContents();
+		shell.pack();
+		shell.open();
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
+				display.sleep();
+			}
+		}
+		display.dispose();
+	}
+	
+	private void createContents() {
 		shell.setText("SWT Calculator");
-		shell.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.VERTICAL)); 
+		shell.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.VERTICAL));
 		
 		TabFolder panels = new TabFolder(shell, SWT.BORDER);
 		
@@ -26,14 +40,6 @@ public class CalculatorWindowSWT {
 		TabItem tabHistory = new TabItem(panels, SWT.NONE);
 		tabHistory.setText("History");   
 		tabHistory.setControl(historyPanel);
-	
-		shell.open();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
-			display.sleep();
-			}
-		}
-		display.dispose();
 	}
 
 }
