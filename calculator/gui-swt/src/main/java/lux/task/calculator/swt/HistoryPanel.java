@@ -21,22 +21,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class HistoryPanel extends Composite{
-	private Button save;
-	private Button clear;
 	private Table table;
-	private String[] titles = {"First number", "Type of operation", "Second number", "Result"};
-	private SelectionListener clearListener = new SelectionAdapter() {
-        @Override
-        public void widgetSelected(SelectionEvent e) {
-        	table.removeAll();
-        }
-    };
-    private SelectionListener saveListener = new SelectionAdapter() {
-        @Override
-        public void widgetSelected(SelectionEvent e) {
-        	buttonSavePress();
-        }
-    };
+	private static String[] titles = {"First number", "Type of operation", "Second number", "Result"};
     
 	public HistoryPanel (Composite parent, int style) {
 		super (parent, style);
@@ -65,13 +51,23 @@ public class HistoryPanel extends Composite{
         
         Composite compositeButtons = new Composite(this, SWT.NONE);
         compositeButtons.setLayout(new FillLayout());
-        save = new Button(compositeButtons, SWT.NONE);
+        Button save = new Button(compositeButtons, SWT.NONE);
         save.setText("Save");
-        clear = new Button(compositeButtons, SWT.NONE);
+        Button clear = new Button(compositeButtons, SWT.NONE);
         clear.setText("Clear");
         
-        clear.addSelectionListener(clearListener);
-        save.addSelectionListener(saveListener);
+        clear.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+            	table.removeAll();
+            }
+        });
+        save.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+            	buttonSavePress();
+            }
+        });
 	}
 	
 	public void addItem(String firstNum, String operation, String secondNum, String result) {
