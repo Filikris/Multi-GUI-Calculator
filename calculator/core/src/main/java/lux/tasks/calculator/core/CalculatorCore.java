@@ -1,5 +1,7 @@
 package lux.tasks.calculator.core;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public final class CalculatorCore {
@@ -12,8 +14,8 @@ public final class CalculatorCore {
 
 	private CalculatorCore() {}
 
-	public Operation[] getSupportedOperations() {
-		return OPERATIONS;
+	public List<Operation> getSupportedOperations() {
+		return Arrays.asList( OPERATIONS );
 	}
 
 	public double executeOperation(Operation operation, double[] arguments) throws CalculationException {
