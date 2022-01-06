@@ -25,23 +25,33 @@
 
     <build>
         <finalName>${project.groupId}.${project.artifactId}-${project.version}-${maven.build.timestamp}</finalName>
-    </build>
 
-    <repositories>
-        <repository>
-            <id>gitlab-maven</id>
-            <url>${env.CI_API_V4_URL}/projects/${env.CI_PROJECT_ID}/packages/maven</url>
-         </repository>
-    </repositories>
-    <distributionManagement>
-          <repository>
-            <id>gitlab-maven</id>
-            <url>${CI_API_V4_URL}/projects/${env.CI_PROJECT_ID}/packages/maven</url>
-         </repository>
-         <snapshotRepository>
-            <id>gitlab-maven</id>
-            <url>${CI_API_V4_URL}/projects/${env.CI_PROJECT_ID}/packages/maven</url>
-         </snapshotRepository>
-    </distributionManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.5.0.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs</artifactId>
+                        <version>4.5.2</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
