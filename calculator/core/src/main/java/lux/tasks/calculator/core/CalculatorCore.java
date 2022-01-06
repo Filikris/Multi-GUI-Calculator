@@ -4,20 +4,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public final class CalculatorCore {
+public final class CalculatorCore implements ICalculator {
 
-	private static final CalculatorCore INSTANCE = new CalculatorCore();
+	private static final ICalculator INSTANCE = new CalculatorCore();
 
-	public static CalculatorCore getInstance() {
+	public static ICalculator getInstance() {
 		return INSTANCE;
 	}
 
 	private CalculatorCore() {}
 
+	@Override
 	public List<Operation> getSupportedOperations() {
 		return Arrays.asList( OPERATIONS );
 	}
 
+	@Override
 	public double executeOperation(Operation operation, double[] arguments) throws CalculationException {
 		Objects.requireNonNull( operation );
 		Objects.requireNonNull( arguments );

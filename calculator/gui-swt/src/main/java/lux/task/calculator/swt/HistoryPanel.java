@@ -19,27 +19,21 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-public class HistoryPanel extends Composite{
+import lux.tasks.calculator.core.Operation;
+
+public class HistoryPanel extends Composite implements ICalculatorListener {
 	private Table table;
 	private static String[] titles = {"First number", "Type of operation", "Second number", "Result"};
     
 	public HistoryPanel (Composite parent, int style) {
 		super (parent, style);
 		
-		FillLayout fillLayout= new FillLayout(SWT.VERTICAL);
-        fillLayout.marginHeight= 40;
-        fillLayout.marginWidth= 40;
-        fillLayout.spacing=20;
-		
-        this.setLayout(fillLayout);
+        this.setLayout(new GridLayout(1, false));
         
-        Composite compositeTable = new Composite(this,SWT.NONE);
-        compositeTable.setLayout(new GridLayout());
-        table = new Table (compositeTable, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+        table = new Table (this, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
     	table.setLinesVisible (true);
     	table.setHeaderVisible (true);
     	GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
-    	data.heightHint = 200;
     	table.setLayoutData(data);
 
     	for (String title : titles) {
@@ -49,6 +43,7 @@ public class HistoryPanel extends Composite{
     	}
         
         Composite compositeButtons = new Composite(this, SWT.NONE);
+        compositeButtons.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
         compositeButtons.setLayout(new FillLayout());
         Button save = new Button(compositeButtons, SWT.NONE);
         save.setText("Save");
@@ -69,7 +64,14 @@ public class HistoryPanel extends Composite{
         });
 	}
 	
-	public void addItem(String firstNum, String operation, String secondNum, String result) {
+	@Override
+	public void operationExecuted(Operation operation, double[] arguments, double result) {
+		addItem(String.valueOf(arguments[0]), operation.getName(),
+				String.valueOf(arguments[1]),String.valueOf(result));
+		
+	}
+	
+	private void addItem(String firstNum, String operation, String secondNum, String result) {
 		TableItem item = new TableItem (table, SWT.NONE);
 		item.setText(0, firstNum);
 		item.setText(1, operation);
@@ -115,5 +117,7 @@ public class HistoryPanel extends Composite{
 			msg.open();
 		}
 	}
+
+	
 
 }

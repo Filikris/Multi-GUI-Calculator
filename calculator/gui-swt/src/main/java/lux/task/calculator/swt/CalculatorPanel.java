@@ -1,5 +1,7 @@
 package lux.task.calculator.swt;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -17,11 +19,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import lux.tasks.calculator.core.CalculationException;
-import lux.tasks.calculator.core.CalculatorCore;
+import lux.tasks.calculator.core.ICalculator;
 import lux.tasks.calculator.core.Operation;
 
-public class CalculatorPanel extends Composite {
-	private static Operation [] operations = CalculatorCore.getInstance().getSupportedOperations();
+public class CalculatorPanel extends Composite implements ICalculatorListener{
+	private List<Operation> operations;
 	private Text num1Field;
 	private Combo operationWithNums;
 	private Text num2Field;
@@ -29,8 +31,7 @@ public class CalculatorPanel extends Composite {
 	private Button calculate;
 	private Label textResult;
 	private Text resultField;
-	private HistoryPanel historyPanel;
-	private CalculatorCore core = CalculatorCore.getInstance();
+	private ICalculator core;
 	private SelectionListener selectionListener = new SelectionAdapter() {
         @Override
         public void widgetSelected(SelectionEvent e) {
@@ -68,15 +69,16 @@ public class CalculatorPanel extends Composite {
 			if(flyCalculator.getSelection()) {
                 calculate();
 			} else {
-	        calculate.setEnabled(isValid(num1Field) && isValid(num2Field));
+				calculate.setEnabled(isValid(num1Field) && isValid(num2Field));
 			}
 	    }
 	};
 	
-	public CalculatorPanel (Composite parent, int style, HistoryPanel historyPanel) {
+	public CalculatorPanel (Composite parent, int style, ICalculator calculator) {
 		super(parent, style);
-		this.historyPanel = historyPanel;
-		
+		core = calculator;
+		operations = calculator.getSupportedOperations();
+				
 		FillLayout fillLayout= new FillLayout(SWT.VERTICAL);
         fillLayout.marginHeight= 40;
         fillLayout.marginWidth= 40;
@@ -84,9 +86,9 @@ public class CalculatorPanel extends Composite {
 		
         this.setLayout(fillLayout);
         
-        String[] actions = new String[operations.length];      
+        String[] actions = new String[operations.size()];      
         for(int i = 0; i < actions.length; i++) {
-        	actions [i] = operations[i].getName();
+        	actions [i] = operations.get(i).getName();
         }
 	
 		Composite compositeLineWithNums = new Composite(this, SWT.NONE); 
@@ -139,12 +141,7 @@ public class CalculatorPanel extends Composite {
     	try {
     		double nums [] = {Double.parseDouble(num1Field.getText()), 
     				Double.parseDouble(num2Field.getText())};
-    		double result = core.executeOperation(operations[operationWithNums.getSelectionIndex()], nums);
-    		resultField.setText("" + result);
-    		
-    		historyPanel.addItem(num1Field.getText(), operationWithNums.getText(),
-    				num2Field.getText(), resultField.getText());
-    		
+    		core.executeOperation(operations.get(operationWithNums.getSelectionIndex()), nums);
     	} catch (NumberFormatException e) {
     		resultField.setText("Invalid input");
     	} catch(CalculationException e) {
@@ -154,5 +151,11 @@ public class CalculatorPanel extends Composite {
     
     public boolean isValid(Text text) {    	
     	return !(text.getText().trim().isEmpty());
-    }  	 
+    }
+
+	@Override
+	public void operationExecuted(Operation operation, double[] arguments, double result) {
+		resultField.setText("" + result);
+		
+	}  	 
 }
