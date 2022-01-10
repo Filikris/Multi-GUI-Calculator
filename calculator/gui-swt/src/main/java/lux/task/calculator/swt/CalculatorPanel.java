@@ -11,6 +11,8 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -76,42 +78,47 @@ public class CalculatorPanel extends Composite implements ICalculatorListener{
 	
 	public CalculatorPanel (Composite parent, int style, ICalculator calculator) {
 		super(parent, style);
+
 		core = calculator;
-		operations = calculator.getSupportedOperations();
-				
-		FillLayout fillLayout= new FillLayout(SWT.VERTICAL);
-        fillLayout.marginHeight= 40;
-        fillLayout.marginWidth= 40;
-        fillLayout.spacing=20;
-		
-        this.setLayout(fillLayout);
-        
+		operations = calculator.getSupportedOperations();				
+
         String[] actions = new String[operations.size()];      
         for(int i = 0; i < actions.length; i++) {
         	actions [i] = operations.get(i).getName();
         }
-	
-		Composite compositeLineWithNums = new Composite(this, SWT.NONE); 
-        compositeLineWithNums.setLayout(new FillLayout());
-		num1Field = new Text(compositeLineWithNums, SWT.BORDER);
-		operationWithNums = new Combo(compositeLineWithNums, SWT.READ_ONLY);
+
+		this.setLayout(new GridLayout(3, false));
+    	this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        
+        num1Field = new Text(this, SWT.SINGLE | SWT.BORDER);
+		num1Field.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+
+		operationWithNums = new Combo(this, SWT.READ_ONLY);
 		operationWithNums.setItems(actions);
 		operationWithNums.select(0);
-		num2Field = new Text(compositeLineWithNums, SWT.BORDER);
+		operationWithNums.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+
+		num2Field = new Text(this, SWT.SINGLE | SWT.BORDER);
+		num2Field.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 		
-		Composite compositeOptionsCalculate = new Composite(this, SWT.NONE);
-        compositeOptionsCalculate.setLayout(new FillLayout());
-		flyCalculator = new Button(compositeOptionsCalculate,SWT.CHECK);
+		flyCalculator = new Button(this,SWT.CHECK);
 		flyCalculator.setText("Calculate on the fly");
-		calculate = new Button(compositeOptionsCalculate, SWT.NONE);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+	    gridData.horizontalSpan = 2;
+	    flyCalculator.setLayoutData(gridData);
+	    
+		calculate = new Button(this, SWT.NONE);
 		calculate.setText("Calculate");
 		calculate.setEnabled(false);
-		
-		Composite compositeResult = new Composite(this, SWT.NONE);
-        compositeResult.setLayout(new FillLayout());
-		textResult = new Label(compositeResult, SWT.NONE);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
+	    calculate.setLayoutData(gridData);
+
+		textResult = new Label(this, SWT.NULL);
 		textResult.setText("Result: ");
-		resultField = new Text(compositeResult, SWT.BORDER);
+		resultField = new Text(this, SWT.SINGLE | SWT.BORDER);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+	    gridData.horizontalSpan = 2;
+	    resultField.setLayoutData(gridData);
 		
 		calculate.addSelectionListener(selectionListener);
 		

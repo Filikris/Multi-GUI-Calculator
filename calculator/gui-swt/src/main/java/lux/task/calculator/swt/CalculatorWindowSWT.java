@@ -31,18 +31,18 @@ public class CalculatorWindowSWT {
 	private void createContents() {
 		shell.setText("SWT Calculator");
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.VERTICAL));
-		
+
 		TabFolder panels = new TabFolder(shell, SWT.BORDER);
-		
+
 		CalculatorWraper calculatorWraper = new CalculatorWraper(calculator);		
-		
+
 		CalculatorPanel calculatorPanel = new CalculatorPanel(panels, SWT.NONE, calculatorWraper);
 		TabItem tabCalculator = new TabItem(panels, SWT.NONE);	
 		tabCalculator.setText("Calculator");
 		tabCalculator.setControl(calculatorPanel);
 		calculatorWraper.addListener(calculatorPanel);
-		
-		HistoryPanel historyPanel = new HistoryPanel(panels,SWT.NONE);
+
+		HistoryPanel historyPanel = new HistoryPanel(panels, SWT.NONE);
 		TabItem tabHistory = new TabItem(panels, SWT.NONE);
 		tabHistory.setText("History");   
 		tabHistory.setControl(historyPanel);

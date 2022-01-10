@@ -33,8 +33,7 @@ public class HistoryPanel extends Composite implements ICalculatorListener {
         table = new Table (this, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
     	table.setLinesVisible (true);
     	table.setHeaderVisible (true);
-    	GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
-    	table.setLayoutData(data);
+    	table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
     	for (String title : titles) {
     		TableColumn column = new TableColumn (table, SWT.NONE);
