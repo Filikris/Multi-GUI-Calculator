@@ -10,7 +10,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -91,7 +90,7 @@ public class CalculatorPanel extends Composite implements ICalculatorListener{
     	this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         
         num1Field = new Text(this, SWT.SINGLE | SWT.BORDER);
-		num1Field.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		num1Field.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		operationWithNums = new Combo(this, SWT.READ_ONLY);
 		operationWithNums.setItems(actions);
@@ -99,7 +98,7 @@ public class CalculatorPanel extends Composite implements ICalculatorListener{
 		operationWithNums.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
 		num2Field = new Text(this, SWT.SINGLE | SWT.BORDER);
-		num2Field.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		num2Field.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		flyCalculator = new Button(this,SWT.CHECK);
 		flyCalculator.setText("Calculate on the fly");
@@ -113,8 +112,9 @@ public class CalculatorPanel extends Composite implements ICalculatorListener{
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 	    calculate.setLayoutData(gridData);
 
-		textResult = new Label(this, SWT.NULL);
+		textResult = new Label(this, SWT.RIGHT);
 		textResult.setText("Result: ");
+		textResult.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		resultField = new Text(this, SWT.SINGLE | SWT.BORDER);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 	    gridData.horizontalSpan = 2;
